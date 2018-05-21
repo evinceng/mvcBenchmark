@@ -24,6 +24,7 @@ class MainPanel():
     
     """
     def __init__(self, root):
+        self.initUserNameFrame(root)
         self.frame2 = Tk.Frame(root)
         self.frame2.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.progressbar = ttk.Progressbar(self.frame2, length=200,
@@ -32,7 +33,16 @@ class MainPanel():
         self.slider = Tk.Scale(self.frame2, from_ = 0, to_ = 1,
                                orient=Tk.HORIZONTAL, resolution = 0.001)
         
-        self.slider.pack()        
+        self.slider.pack()  
+        
+    def initUserNameFrame(self, root):
+        self.userNameVar = Tk.StringVar()
+        self.frame4 = Tk.Frame(root)
+        self.frame4.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.userNameLabel = Tk.Label(self.frame4, text="User Name:")
+        self.userNameLabel.pack(side=Tk.LEFT)
+        self.userNameEntry = Tk.Entry(self.frame4, width=11, textvariable=self.userNameVar)
+        self.userNameEntry.pack(side=Tk.RIGHT)
         
 class SidePanel():
     """Class managing the start and stop buttons.
@@ -41,7 +51,7 @@ class SidePanel():
     def __init__(self, root):
         self.frame3 = Tk.Frame(root)
         self.frame3.pack(side=Tk.RIGHT, fill=Tk.BOTH, expand=1)
-        self.startButton = Tk.Button(self.frame3, text="Start")
+        self.startButton = Tk.Button(self.frame3, text="Start", state="disabled")
         self.startButton.pack(side="top",fill=Tk.BOTH)
         self.stopButton = Tk.Button(self.frame3, text="Stop", state="disabled")
         self.stopButton.pack(side="top",fill=Tk.BOTH)

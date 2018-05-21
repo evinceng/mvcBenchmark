@@ -20,6 +20,7 @@ class Controller():
         self.view.sidePanel.stopButton.bind("<Button>",self.stop)
         self.view.mainPanel.slider.bind("<B1-Motion>", self.calculateVal)
         self.view.mainPanel.progressbar["maximum"] = self.model.progressBarMaxVal
+        self.view.mainPanel.userNameVar.trace("w", self.updateStartButtonState)
   
     def run(self):
         self.root.title("MVC")
@@ -27,15 +28,21 @@ class Controller():
         self.root.mainloop()
         
     def start(self,event):
-        self.view.sidePanel.startButton.config(state="disabled")
-        self.view.sidePanel.stopButton.config(state="normal")
-        self.clearSlider()
+        #since bind does not work like command you have to check the state
+        if self.view.sidePanel.startButton["state"] == "normal":
+            self.view.sidePanel.startButton.config(state="disabled")
+            self.view.sidePanel.stopButton.config(state="normal")
+            self.clearSlider()
         
     def stop(self,event):
-        self.view.sidePanel.startButton.config(state="normal")
-        self.view.sidePanel.stopButton.config(state="disabled")
-        self.clearSlider()
-        self.model.stop()
+        #since bind does not work like command you have to check the state
+        if self.view.sidePanel.stopButton["state"] == "normal":
+            if self.view.mainPanel.userNameVar.get():
+                self.view.sidePanel.startButton.config(state="normal")
+                
+            self.view.sidePanel.stopButton.config(state="disabled")
+            self.clearSlider()
+            self.model.stop()
 
     def calculateVal(self,event):
         currentVal = self.view.mainPanel.slider.get()
@@ -44,6 +51,12 @@ class Controller():
         
     def clearSlider(self):
         self.view.mainPanel.progressbar["value"] = self.model.progressBarMinVal
+        
+    def updateStartButtonState(self, *_):
+        if self.view.mainPanel.userNameVar.get():
+            self.view.sidePanel.startButton.config(state="normal")
+        else:
+            self.view.sidePanel.startButton.config(state="disabled")
         
         
   
